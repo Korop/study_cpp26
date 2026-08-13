@@ -1,0 +1,8 @@
+build/
+build-xcode/
+.cache/
+.vscode/
+compile_commands.json
+*.o
+*.out
+.DS_Store
