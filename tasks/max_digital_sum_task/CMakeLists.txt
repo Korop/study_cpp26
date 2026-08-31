@@ -1,0 +1,7 @@
+add_executable(max_digital_sum_task main.cpp)
+target_link_libraries(max_digital_sum_task PRIVATE Threads::Threads)
+set_target_properties(max_digital_sum_task PROPERTIES FOLDER "MaxDigitalSumTask")
+
+add_executable(max_digital_sum_task_array max_digits_sum_array.cpp)
+target_link_libraries(max_digital_sum_task_array PRIVATE Threads::Threads)
+set_target_properties(max_digital_sum_task_array PROPERTIES FOLDER "MaxDigitalSumTask")
