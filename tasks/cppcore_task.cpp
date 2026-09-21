@@ -3,6 +3,8 @@
 #include <string>
 #include <functional>
 #include <random>
+#include "utils.hpp"
+#include <span>
 
 
 class Player
@@ -18,12 +20,12 @@ public:
     void Damage(int damageValue)
     {
         _health -= damageValue;
-        std::print("health={}, damageValue={}\n" , _health, damageValue);
+        Print("health={}, damageValue={}\n" , std::make_format_args(_health, damageValue));
     }
 
     void Damage() const
     {
-        std::print("health={}\n" , _health);
+        Print("health={}\n" , std::make_format_args(_health));
     }
 };
 
@@ -56,6 +58,21 @@ enum ColorEnum
     Blue
 };
 ///
+class AnimalBad
+{
+public:
+    virtual void Speak();
+};
+// Derived
+class CatBad : public AnimalBad
+{
+public:
+    void Speak() override
+    {
+        std::cout << "Cat\n";
+    }
+};
+////
 
 enum class ColorEnumClass
 {
@@ -86,7 +103,22 @@ constexpr int Square(int x)
 {
     return x * x;
 }
+////////
+// void FooInt(int* values){};
+// void FooInt(int values[]){};
+//The compiler does not enforce the 5.
+void FooInt(int values[5]) {
+     values[0] = 42;
+};
 
+// In modern C++26, I'd usually prefer std::span
+void FooIntSpan(std::span<int, 5> values)
+{
+    values[1] = 42;
+}
+// They are all treated as: void Foo(int* values);
+
+/////////////////////
 // A simple C++23/26 compatible file
 int main() {
     std::cout << "Start CppCore\n";
@@ -114,7 +146,7 @@ int main() {
 
     // enum
     if ((int)ColorEnum::Red == (int)ColorEnumClass::Red) {
-        std::println("Enum color Ok");
+        Println("Enum color Ok", std::make_format_args());
     }
 
     std::cout << "CppCore: Lambda\n";
@@ -124,7 +156,7 @@ int main() {
         return a + b;
     };
     int result = add(10, 20);
-    std::println("Lambda result={}", result);
+    Println("Lambda result={}", std::make_format_args(result));
     // lambda 2 Lambda empty capture
     double  mult = 1.5;
     auto divideEmptyCapture = [](double a, double b) -> double
@@ -149,7 +181,7 @@ int main() {
     };
     increment();
     increment();
-    std::println("Lambda increment counter={}", counter);
+    Println("Lambda increment counter={}", std::make_format_args(counter));
 
     // 
     auto lambdaEverythingByRef = [&, mult]()
@@ -162,18 +194,18 @@ int main() {
     };
 
     lambdaEverythingByRef();
-    std::println("lambdaEverythingByRef: increment counter={}, mult={}", counter, mult);
+    Println("lambdaEverythingByRef: increment counter={}, mult={}", std::make_format_args(counter, mult));
     // This modifies the lambda's copy:
     int x = 10;
 
     auto lambdaMutable = [x]() mutable
     {
         x++;
-        std::println("LambdaMutable: internal coly x={}", x);
+        Println("LambdaMutable: internal coly x={}", std::make_format_args(x));
     };
 
     lambdaMutable();
-    std::println("LambdaMutable external x={}", x); // still 10
+    Println("LambdaMutable external x={}", std::make_format_args(x)); // still 10
     // 
     std::function<int(int)> lambdaFunction =
     [](int value)
@@ -181,10 +213,14 @@ int main() {
         return value * 2;
     };
     int funcRestult = lambdaFunction(50);
-    std::println("LambdaFunction function={}", funcRestult);
+    Println("LambdaFunction function={}", std::make_format_args(funcRestult));
     
     unsigned long long int val = 10;
     
+    std::function<void(int)> lambdaAction = [](int value) {
+        Println("lambdaAction action={}", std::make_format_args(value));
+    };
+    lambdaAction(55);
 
     // constant expression and is available at compile time
     // A constexpr variable is also effectively const
@@ -203,7 +239,7 @@ int main() {
     //    runtime when used normally
     int runtimeValue = (int) std::rand()  % 10;
     int squareResult = Square(runtimeValue);
-    std::println("Constexpr: squareResult={}", squareResult);
+    Println("Constexpr: squareResult={}", std::make_format_args(squareResult));
     // const
     //      cannot modify
 
@@ -215,9 +251,15 @@ int main() {
 
     // constinit
     //     variable initialization must happen statically
-
-
-
+    {
+        int aaa[5]{};
+        FooInt(aaa);
+        FooIntSpan(aaa);
+        
+        int bbb[2]{};
+        FooInt(bbb); // compiles
+        // FooIntSpan(bbb); // non compiled, need exact size 5
+    }
     std::cout << "Stop CppCore\n";
 
     return 0;

@@ -6,6 +6,9 @@
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <type_traits>
+#include <cstddef>
+#include <print>
 
 enum class GameState
 {
@@ -114,11 +117,12 @@ public:
 //----------------------------------------------------
 struct Rectangle
 {
-    int x{};
-    int y{};
-    int width{};
-    int height{};
+    int x{};       // 1
+    int y{};       // 2
+    int width{};   // 3
+    int height{};  // 4
 };
+
 struct Point
 {
     int x{};
@@ -137,6 +141,18 @@ double d2 = d1;   // unspecified:
 
 double d1 = fd(); // may be initialized statically or dynamically to 1.0
 //----------------------------------------------------
+template<typename T>
+class Box3
+{
+public:
+    Box3(T value)
+    {
+    }
+};
+// Sometimes the compiler cannot deduce exactly what you want.
+Box3(const char*) -> Box3<std::string>;
+//----------------------------------------------------
+
 // A simple C++23/26 compatible file
 int main() {
     std::println("Undefined Init: d2={}, d1={}", d2, d1);
@@ -154,19 +170,21 @@ int main() {
     Rectangle rect{
         .x = 10,
         .y = 12,
-        .height = 600,
-        .width = 800
+        .width = 800,
+        .height = 600
     };
     Point p{
-        .y = 20, //?
-        .x = 10
+        .x = 10,
+        .y = 20 //?
     };
     // Rectangle rect{};
     std::println("Rectangle rect x={},y={}, h={}, w={}", rect.x, rect.y, rect.height, rect.width);
 
     std::map<std::string, int> ages{
+        {"Bob", 50},
         {"Bob", 20},
-        {"Bob", 50}
+        {"Bob", 10},
+        {"Bob", 70},
     };
     std::println("map ages[Bob]={}", ages["Bob"]);
 
@@ -177,6 +195,37 @@ int main() {
 
     constexpr int size = 10;
     std::array<int, size> arr;
+
+    // std::array matrix Fixed dimensions
+    std::array<std::array<int, 3>, 3> matrixOldStyle{{
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    }};
+    //Modern compilers frequently allow cleaner:
+    std::array<std::array<int, 3>, 3> matrix{
+        std::array{1, 2, 3},
+        std::array{4, 5, 6},
+        std::array{7, 8, 9}
+    };
+
+    // C++17 structured bindings make this much nicer:
+    std::tuple<int, std::string, double> player{
+        10,
+        "Alice",
+        98.5
+    };
+    std::get<0>(player); // 10
+    std::get<1>(player); // Alice
+    std::get<2>(player); // 98.5
+    // structured bindings
+    auto [id, name, score] = player;
+
+    //
+    const char* nameBox = "Ivan";
+    Box3 boxIvanString{nameBox};
+    decltype(boxIvanString) sssd{"d"};
+    // static_assert(std::meta::is_type(^^boxIvanString));
     
     return 0;
 }

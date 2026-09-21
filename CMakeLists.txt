@@ -5,7 +5,7 @@ project(InterviewCpp VERSION 1.0.0 LANGUAGES CXX)
 # Require C++23, fallback to 20 if compiler does not support it
 # But we'll try to set 26 if available
 set(CMAKE_CXX_STANDARD 26)
-set(CMAKE_CXX_STANDARD_REQUIRED OFF) 
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -13,6 +13,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(MSVC)
     add_compile_options(/W4 /permissive- /EHsc /Zc:__cplusplus)
 else()
+    # add_compile_options(-Wall -Wextra -Werror=reorder-init-list -Wpedantic -pedantic-errors)
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
@@ -23,7 +24,7 @@ if(APPLE)
         OUTPUT_VARIABLE INTERVIEW_MACOS_SDK
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    if(EXISTS "${INTERVIEW_MACOS_SDK}/usr/include/c++/v1/iostream")
+    if(EXISTS "${INTERVIEW_MACOS_SDK}/usr/include/c++/v1/iostream" AND NOT CMAKE_CXX_COMPILER STREQUAL "/opt/homebrew/bin/g++-16")
         include_directories(SYSTEM "${INTERVIEW_MACOS_SDK}/usr/include/c++/v1")
     endif()
 endif()

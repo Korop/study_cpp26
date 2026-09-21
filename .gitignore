@@ -1,4 +1,5 @@
 build/
+build-gcc/
 build-xcode/
 .cache/
 .vscode/

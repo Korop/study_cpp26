@@ -37,12 +37,24 @@ You can configure and build everything standardly via the terminal:
 ```bash
 # 1. Configure the project
 cmake -S . -B build
+# or
+cmake -S . -B build -DCMAKE_CXX_COMPILER=/usr/bin/clang++
 
 # 2. Build a specific target (or leave out --target to build all)
-cmake --build build --target hello
+cmake --build build --target hello_task
 
 # 3. Run the executable
-./build/tasks/hello
+./build/tasks/hello_task
+```
+
+## GCC 16
+```bash
+# 1. Configure the project
+cmake -S . -B build-gcc -DCMAKE_CXX_COMPILER=/opt/homebrew/bin/g++-16
+# 2. Build a specific target (or leave out --target to build all)
+cmake --build build-gcc --verbose
+# 3. Run the executable
+./build-gcc/tasks/hello
 ```
 
 ## C++ Standards & Compilers
