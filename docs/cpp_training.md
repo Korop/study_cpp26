@@ -234,4 +234,3 @@ A feature's standard version and its compiler/library availability are separate.
 
 </details>
 
-The review routine uses retrieval and spaced practice, supported by [Dunlosky et al.'s learning-techniques review](https://journals.sagepub.com/doi/10.1177/1529100612453266). The particular intervals above are a practical starting point.

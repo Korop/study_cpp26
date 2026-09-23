@@ -11,3 +11,5 @@ compile_commands.json
 *.o
 *.out
 .DS_Store
+docs/gen_doc_prompt.md
+docs/gen_doc_prompt2.md
