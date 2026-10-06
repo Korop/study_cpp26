@@ -80,7 +80,7 @@ void Print(const R& range)
     }
 };
 ///---------------------------
-template<typename R>
+template<typename R>    
 requires std::ranges::range<const R>
 void PrintRange(const R& range)
 {
@@ -161,6 +161,176 @@ void PrintContainerGood(const T& container)
         std::cout << value << '\n';
     }
 };
+//// Any type supporting +
+template<typename T>
+concept Addable =
+    requires(T a, T b)
+    {
+        a + b;
+    };
+
+template<Addable T>
+T Add(T a, T b)
+{
+    return a + b;
+}
+
+//// concept HasGetId
+// value.GetId()
+// must exist
+// and result must be exactly int
+template<typename T>
+concept HasGetId =
+    requires(const T& value)
+    {
+        // value.GetId();
+        {
+            value.GetId()
+        } -> std::same_as<int>;
+    };
+
+struct Player
+{
+    int GetId() const
+    {
+        return 42;
+    }
+};
+
+template<HasGetId T>
+void PrintId(const T& value)
+{
+    std::cout << "Id: " << value.GetId();
+}
+//////
+template<typename T>
+concept HasSize =
+    requires(const T& value)
+    {
+        {
+            value.size()
+        } -> std::convertible_to<std::size_t>;
+    };
+////Combine concepts with &&
+template<typename T>
+concept Numeric =
+    std::integral<T>
+    || std::floating_point<T>;
+
+template<Numeric T>
+T Square(T value)
+{
+    return value * value;
+}    
+///// requires expression versus requires clause
+// They can be combined directly
+template<typename T>
+requires requires(T value)
+//^^^^^^^ ^^^^^^^^
+// clause   expression
+{
+    value.size();
+}
+void Process2(const T& value) //function
+{
+}
+// Equivalent idea: 
+template<typename T>
+requires HasSize<T>
+void Process3(const T& value)
+{
+}
+
+//You can even have multiple clauses
+template<typename T>
+requires std::copy_constructible<T>   // requires-clause
+void Process(T value)
+    requires                          // another requires-clause
+        requires(T x)                 // requires-expression
+        {
+            requires sizeof(T) > 4;
+            x.size();
+        }
+{
+}
+
+///
+template<typename T>
+requires requires(T x) { x.size(); }
+void func(T x);
+///
+struct PlayerH
+{
+    int health;
+};
+
+// Concept with member variables
+template<typename T>
+concept HasHealth =
+    requires(T value)
+    {
+        value.health;
+    };
+
+// Works for anything exposing health.
+template<HasHealth T>
+void Kill(T& value)
+{
+    value.health = 0;
+}
+// Concept with operator requirements
+template<typename T>
+concept Comparable =
+    requires(const T& a, const T& b)
+    {
+        {
+            a == b
+        } -> std::convertible_to<bool>;
+
+        {
+            a < b
+        } -> std::convertible_to<bool>;
+    };
+
+template<Comparable T>
+bool IsSmaller(const T& a, const T& b)
+{
+    return a < b;
+}
+///
+template<std::integral T>
+void Print(T value)
+{
+}
+// new form --> convenient for small generic functions
+void PrintShot(std::integral auto value)
+{
+}
+/// a and b do not necessarily have the same type.
+auto AddIntegral( std::integral auto a, std::integral auto b )
+{
+    return a + b;
+}
+
+// If you want exactly the same type, use one template parameter:
+template<std::integral T>
+T AddSameType(T a, T b)
+{
+    return a + b;
+}
+
+///Concepts participate in overload resolution, which is much nicer than many older SFINAE tricks.
+template<typename T>
+void PrintOve(T value)
+{
+    std::cout << "generic";
+}
+
+template<std::integral T>
+void PrintOve(T value)
+{
+    std::cout << "integral";
+}
 
 // A simple C++23/26 compatible file
 int main() {
@@ -175,8 +345,48 @@ int main() {
     // PrintContainerGood(bc); // compile error: because 'container.size()' may throw an exception
     // PrintContainer(bc); // there is not destrutor inBedContainer, because 'BedContainer' does not satisfy 'destructible'
     BedContainer::Destroy(&bc);
+
+    // Addable concept
+    std::println("int sum={}", Add(10, 20));        // OK
+    std::println("double sum={}", Add(1.55, 2.05));        // OK
+
+
+    ///
+    Player p;
+    PrintId(p);
+
+    // all satisfy the idea of having .size() convertible to size_t.
+    static_assert( HasSize<std::string>);
+    static_assert( HasSize<std::array<int, 10>>);
+    static_assert( HasSize<std::vector<int>>);
+    std::array<int, 10> arr10;
+    static_assert(arr10.size() == 10);
+
+    Square(10);
+    Square(2.5);
+    // Square(std::string{"123"}); //compiler error: no matching function for call to 'Square'
+    //Constrained auto
+    std::integral auto value = 10;
+    // std::integral auto value = 10.5; //Invalid. compiler error
+
+
+    auto sum33 = AddIntegral(int{10}, long{20});
+    static_assert(std::is_same_v<decltype(sum33), long>);
+
+
+    std::println("");
+    //The constrained overload is more specific:
+    PrintOve(10);
+    std::println("");
+    PrintOve(3.14);
+
     std::println("");
     return 0;
 }
 
+// | Syntax                           | What it is          | Purpose                                              |
+// | -------------------------------- | ------------------- | ---------------------------------------------------- |
+// | `requires Condition`             | requires-clause     | Constrains a declaration                             |
+// | `requires(T x) { ... }`          | requires-expression | Tests validity/capabilities                          |
+// | `requires requires(T x) { ... }` | clause + expression | Uses a requires-expression as the clause's condition |
 

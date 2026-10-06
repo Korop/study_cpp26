@@ -64,6 +64,7 @@ void Describe(T&& value)
 // Describe(const char*) -> Describe<std::string>; // ❌ not a thing, only possible define the deduction guide for a class template
 //---------------
 
+
 // cannot create the first Astral object normally.
 class Astral
 {
@@ -76,6 +77,28 @@ public:
 };
 
 //---------------
+struct Player2
+{
+    Player2(int id, std::string name)
+    {
+    }
+};
+///////////
+template<typename T>
+std::enable_if_t<
+    std::is_integral_v<T>,
+    void
+>
+Process(T value)
+{
+}
+/////////////////
+template<typename T>
+requires std::integral<T>
+void ProcessConcept(T value)
+{
+}
+////
 
 // A simple C++23/26 compatible file
 int main() {
@@ -329,6 +352,20 @@ int main() {
         // 3. std::add_lvalue_reference_t<...> //const int&
         static_assert(std::is_same_v<R, const int&>);
     }
+
+    //------------is_constructible_v
+    static_assert( std::is_constructible_v< Player2, int, std::string > );
+    static_assert( !std::is_constructible_v< Player2, int, std::string, double > );
+
+    Process(10);
+    // SFINAE
+    // Substitution Failure
+    // Is Not
+    // An Error
+    // Process(10.5); //compiler error
+    // concept as modernt syntax instead of std::enable_if_t
+    ProcessConcept(10);
+    // ProcessConcept(10.50); //compiler error
 
     std::println("");
     return 0;

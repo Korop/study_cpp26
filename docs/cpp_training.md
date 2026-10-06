@@ -2,6 +2,10 @@
 
 A study path from C++11 to C++26, with C# comparisons and practice in numerical programming, embedded systems and algorithms.
 
+## Overall progress
+
+**46% of topics started** — 28 of 61 topics are Read or InProgress (22 Read, 6 InProgress). **0% Done** — no topic has yet passed the independent explanation, application and later review required for Done. This percentage measures study coverage, not mastery.
+
 ## Current focus
 
 Continue the core lessons at **“20. Why `string_view` is useful”**, then read sections **21–28**.
@@ -37,14 +41,14 @@ Read statuses cover the material already encountered, including the existing not
 | <a id="c03"></a>[RAII and smart pointers](cpp/raii_smart_pointers_interview.md): ownership and resource lifetime (C++11/14) | Read | 3/5 | 0 | 0 |
 | <a id="c04"></a>[Copy, move and special member functions](cpp/copy_move_traits_interview.md) (C++11/17) | Read | 4/5 | 0 | 0 |
 | <a id="c05"></a>References, value categories and perfect forwarding (C++11) | Read | 4/5 | 0 | 0 |
-| <a id="c06"></a>[Type deduction](cpp/auto_deduction.md): `auto`, `decltype` and `decltype(auto)` (C++11/14) | Read | 3/5 | 0 | 0 |
+| <a id="c06"></a>[Type deduction](cpp/auto_deduction.md): `auto`, `decltype` and `decltype(auto)` (C++11/14) | Read | 3/5 | 1 | 0 |
 | <a id="c07"></a>Lambdas, captures and callable objects (C++11/14/17) | Read | 3/5 | 0 | 0 |
 | <a id="c08"></a>[Using declarations and aliases](cpp/using_interview.md) (C++11/20 additions) | Read | 2/5 | 0 | 0 |
 | <a id="c09"></a>Templates, specialization, parameter packs and non-type parameters (C++11/17/20 additions) | Read | 3/5 | 0 | 0 |
 | <a id="c10"></a>Constant evaluation: `constexpr`, `consteval`, [constinit](cpp/cpp26_constinit_interview.md) (C++11/14/20/23) | Read | 3/5 | 0 | 0 |
 | <a id="c11"></a>Fold expressions and `if constexpr` (C++17) | Read | 3/5 | 0 | 0 |
 | <a id="c12"></a>[Class template deduction and structured bindings](cpp/cpp26_structured_bindings_and_matching.md) (C++17) | Read | 2/5 | 0 | 0 |
-| <a id="c13"></a>Type traits, type transformations and SFINAE (C++11/14/17/20) | Read | 3/5 | 0 | 0 |
+| <a id="c13"></a>Type traits, type transformations and SFINAE (C++11/14/17/20) | InProgress | 3/5 | 0 | 1 |
 
 ### Library and everyday C++
 
@@ -59,8 +63,8 @@ Read statuses cover the material already encountered, including the existing not
 | <a id="c20"></a>[Casts](cpp/casts_interview.md), object representation, alignment and undefined behaviour | Read | 4/5 | 0 | 0 |
 | <a id="c21"></a>Exceptions, error handling and `noexcept` (C++11) | Pending | 3/5 | 0 | 0 |
 | <a id="c22"></a>`span` and borrowed buffers (C++20) | Pending | 3/5 | 0 | 0 |
-| <a id="c23"></a>Concepts and `requires` (C++20) | Pending | 4/5 | 0 | 0 |
-| <a id="c24"></a>Ranges, views and lazy evaluation (C++20/23) | Pending | 4/5 | 0 | 0 |
+| <a id="c23"></a>Concepts and `requires` (C++20) | InProgress | 4/5 | 0 | 1 |
+| <a id="c24"></a>Ranges, views and lazy evaluation (C++20/23) | InProgress | 4/5 | 0 | 1 |
 | <a id="c25"></a>Filesystem and text conversion (C++17), `format` (C++20), `print` (C++23) | Pending | 2/5 | 0 | 0 |
 | <a id="c26"></a>[Coroutines and generators](cpp/yield_interview.md) (language: C++20; `generator`: C++23) | Read | 4/5 | 0 | 0 |
 | <a id="c27"></a>`co_await`, suspension, lifetime and cancellation (C++20) | Pending | 5/5 | 0 | 0 |
@@ -75,8 +79,8 @@ Read statuses cover the material already encountered, including the existing not
 |---|---|---|---|---|
 | <a id="n01"></a>Integer overflow, floating-point error and stable accumulation | Pending | 4/5 | 0 | 0 |
 | <a id="n02"></a>Random numbers, sampling, RTP, variance and uncertainty (`random`: C++11) | Pending | 4/5 | 0 | 0 |
-| <a id="n03"></a>Threads, mutexes, futures and coordination (C++11); `jthread` and cancellation (C++20) | Pending | 4/5 | 0 | 0 |
-| <a id="n04"></a>Atomics and memory ordering (C++11); wait/notify (C++20) | Pending | 5/5 | 0 | 0 |
+| <a id="n03"></a>Threads, mutexes, futures and coordination (C++11); [`jthread` and cancellation](cpp/cpp26_stop_token_jthread_interview.md) (C++20); [`thread_local`](cpp/thread_local_interview.md) (C++11) | InProgress | 4/5 | 0 | 1 |
+| <a id="n04"></a>[Atomics and memory ordering](cpp/cpp26_atomics_memory_order_seq_cst_mutex.md) (C++11); wait/notify (C++20) | InProgress | 5/5 | 0 | 1 |
 | <a id="n05"></a>Parallel algorithms, batches and reductions (C++17/20) | Pending | 4/5 | 0 | 0 |
 | <a id="n06"></a>Profiling, benchmarks and scaling | Pending | 4/5 | 0 | 0 |
 
@@ -179,10 +183,16 @@ After a session, update the counts and add a short log entry. Mark Done only aft
 <a id="study-log"></a>
 ## Study log
 
-No sessions recorded yet. Append a short entry after studying; add corrections as new entries so the history stays visible.
+Append a short entry after studying; add corrections as new entries so the history stays visible.
 
 | Date | Topic | What I did and how it went | Next review |
 |---|---|---|---|
+| 2026-10-07 | [Type deduction](#c06) | Read the [last-commit note](cpp/cpp26_decltype_value_categories_interview.md) on `decltype((x))` and value categories and the staged [expanded `auto` notes](cpp/auto_deduction.md). Counted one topic reread; independent recall has not been checked. | 2026-10-08: predict `auto` and `decltype` types without notes. |
+| 2026-10-07 | [Type traits and SFINAE](#c13) | Staged [trait examples](../tasks/traits_task.cpp) using `is_constructible_v`, `enable_if_t` and a concept. Recorded one practice session; results have not been checked. | 2026-10-08: explain when substitution fails and compare the concept constraint. |
+| 2026-10-07 | [Concepts and `requires`](#c23) | Staged [concept examples](../tasks/concept_task.cpp) and [constrained factory](../tasks/concept_inheritance.cpp). Recorded one practice session; results have not been checked. | 2026-10-08: write a `requires` expression from memory. |
+| 2026-10-07 | [Ranges and views](#c24) | Staged [range examples](../tasks/range_task.cpp) covering lazy views and source lifetime. Recorded one practice session; results have not been checked. | 2026-10-08: explain when a returned view dangles. |
+| 2026-10-07 | [Threads, `jthread`, cancellation and `thread_local`](#n03) | Read the staged [`jthread`/stop-token](cpp/cpp26_stop_token_jthread_interview.md) and [`thread_local`](cpp/thread_local_interview.md) notes; staged thread, cancellation, condition-variable and per-thread-state examples. Recorded one practice session; results have not been checked. | 2026-10-08: explain stop requests, waiting and per-thread lifetime. |
+| 2026-10-07 | [Atomics and memory ordering](#n04) | Read the staged [atomics note](cpp/cpp26_atomics_memory_order_seq_cst_mutex.md) and staged a [`seq_cst`/relaxed example](../tasks/atomic_seq_task.cpp). Recorded one practice session; results have not been checked. | 2026-10-08: explain what `seq_cst` adds to atomic operations. |
 
 A note can be as simple as: “Recalled the lifetime rule, but needed a hint for the temporary-string case.” Mention help used and link an example when useful.
 
@@ -233,4 +243,3 @@ A feature's standard version and its compiler/library availability are separate.
 - A moved-from string is valid, but it is not guaranteed to be empty.
 
 </details>
-
